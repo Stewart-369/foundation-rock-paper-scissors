@@ -1,3 +1,6 @@
+let humanScore = 0;
+let computerScore = 0;
+
 function getcomputerChoice() {
     let randomNum = Math.floor(Math.random() * 3);
 
@@ -11,42 +14,42 @@ function getcomputerChoice() {
     }
 }
 
-function getHumanChoice() {
-    return prompt("Please choose rock, paper or scissors").toLowerCase();
-}
-
-function playGame() {
-
-let humanScore = 0;
-let computerScore = 0;
-
 function playRound(humanChoice, computerChoice) {
   if (humanChoice === computerChoice) {
-        console.log("It's a tie!");
+      return `It's a tie! You both chose ${humanChoice}`;
   } else if (
         (humanChoice === "rock" && computerChoice === "scissors") ||
         (humanChoice === "paper" && computerChoice === "rock") ||
         (humanChoice === "scissors" && computerChoice === "paper")
   ) {
-        console.log(`You Win! ${humanChoice} beats ${computerChoice}`);
-        humanScore++;
+      humanScore++;
+      return `You Win! ${humanChoice} beats ${computerChoice}`;
+        
   } else {
-        console.log(`You Lose! ${computerChoice} beats ${humanChoice}`);
-        computerScore++;
+      computerScore++;
+      return `You Lose! ${computerChoice} beats ${humanChoice}`;     
   }
 }
 
-  for (let i = 1; i <= 5; i++) {
-    let humanChoice = getHumanChoice();
-    let computerChoice = getcomputerChoice();
-    playRound(humanChoice, computerChoice);
-  }
+function updateDisplay(message) {
+  
+  document.querySelector("#round-result").textContent = message;
+  document.querySelector("#score").textContent = `You: ${humanScore} vs Computer: ${computerScore}`;
+  
+    if (humanScore === 5 || computerScore === 5) {
+      let winner = humanScore > computerScore
+      ? "You win the game!" : "Computer wins the game!";
 
-  if (humanScore > computerScore) {
-    console.log("You win the game!");
-  } else if (computerScore > humanScore) {
-    console.log("You lose the game!");
-  } else {
-    console.log("Its a tie!");
-  }
+  document.querySelector("#winner").textContent = winner;
+    } 
 }
+
+let button = document.querySelectorAll("button");
+
+button.forEach(button => {
+  button.addEventListener("click", () => {
+  let humanChoice = button.id;
+  let message = playRound(humanChoice, getcomputerChoice());
+  updateDisplay(message);
+  });
+});
